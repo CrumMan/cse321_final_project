@@ -47,7 +47,6 @@ async function(accessToken, refreshToken, profile, done){
             const newUser = {
                 githubId: profile.id,
                 username: profile.username,
-                email: profile.emails?.[0]?.value,
                 createdAt: new Date()
             }
             const result = await db.collection('user').insertOne(newUser)
