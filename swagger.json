@@ -5,11 +5,10 @@
     "description": "User Api for account and post creation",
     "version": "1.0.0"
   },
-  "host": "localhost:4020",
+  "host": "cse321-final-project.onrender.com",
   "basePath": "/",
   "schemes": [
-    "https",
-    "http"
+    "https"
   ],
   "paths": {
     "/users/": {
