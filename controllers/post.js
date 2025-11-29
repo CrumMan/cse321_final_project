@@ -99,12 +99,11 @@ try{
     .getDb()
     .collection('post')
     .replaceOne({ _id: postId }, post)
-
-    res.status(201).json({ id: response.insertedId })
-
-    if(response.modifiedCount > 0){
-        res.status(204).send()
-    }
+    if (response.modifiedCount > 0) {
+        res.status(204).send();
+    } else {
+        res.status(400).json({ message: "Post was not modified" });
+        }
 }
 catch(err){
         res.status(500).json({message:err.message || 'Error fetching posts collection'})
