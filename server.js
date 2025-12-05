@@ -25,7 +25,7 @@ app.use(bodyParser.json())
    .use(cors({origin:'*'}))
    .use(cors({methods: ['GET', 'POST','PUT','PATCH']}))
    .use((req,res,next) => {
-     res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Orgin, X-Requested-With, Content-Type, Accept, Z-Key');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();

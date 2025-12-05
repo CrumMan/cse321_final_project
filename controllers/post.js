@@ -14,7 +14,7 @@ const getAll = async (req, res) => {
         return res.status(400).json({ message: "No posts found" });
     }
 
-        res.setHeader('content-type',' application/json')
+        res.setHeader('content-type','application/json')
         res.status(200).json(posts)
     })
 }
@@ -38,7 +38,7 @@ const getSingle = async(req,res) => {
         if (!post || post.length === 0) {
         return res.status(400).json({ message: "No posts found" });
     }
-         res.setHeader('content-type',' application/json')
+         res.setHeader('content-type','application/json')
          res.status(200).json(post[0])
     })}
     catch(err){

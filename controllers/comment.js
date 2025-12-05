@@ -40,7 +40,7 @@ const getSingle = async(req,res) => {
         if (!comment || comment.length === 0) {
         return res.status(400).json({ message: "No comments found" });
     }
-         res.setHeader('content-type',' application/json')
+         res.setHeader('content-type','application/json')
          res.status(200).json(comment[0])
     })}
     catch(err){

@@ -45,7 +45,7 @@
       "get": {
         "description": "",
         "produces": [
-          " application/json"
+          "application/json"
         ],
         "parameters": [
           {
@@ -202,7 +202,7 @@
       "get": {
         "description": "",
         "produces": [
-          " application/json"
+          "application/json"
         ],
         "parameters": [
           {
@@ -263,7 +263,7 @@
       "get": {
         "description": "",
         "produces": [
-          " application/json"
+          "application/json"
         ],
         "parameters": [
           {
@@ -389,7 +389,7 @@
       "get": {
         "description": "",
         "produces": [
-          " application/json"
+          "application/json"
         ],
         "responses": {
           "200": {
@@ -411,7 +411,7 @@
       "get": {
         "description": "",
         "produces": [
-          " application/json"
+          "application/json"
         ],
         "parameters": [
           {

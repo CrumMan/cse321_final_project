@@ -58,7 +58,7 @@ const getSingle = async(req,res) => {
             ...user, ...userInfo
         }
         
-            res.setHeader('content-type',' application/json')
+            res.setHeader('content-type','application/json')
             res.status(200).json(combinedData)
     }
     catch(err){
@@ -340,7 +340,7 @@ const getFriends = async(req,res) =>{
         .collection('friend')
         .findOne({userId: userId})
         if(response){
-            res.setHeader('content-type',' application/json')
+            res.setHeader('content-type','application/json')
            return res.status(200).json(response)
         } else{
             return res.status(404).json({message: "No friends found for user"})
