@@ -149,7 +149,6 @@ const deletecomment = async (req,res) => {
         }
         else{
             res.status(204).json({message:"Failed to delete comment"})
-            
         }
     }
     catch(err){
