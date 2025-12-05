@@ -51,7 +51,10 @@ async function(accessToken, refreshToken, profile, done){
             }
             const result = await db.collection('user').insertOne(newUser)
             newUser.isFirstLogin = true;
+            newUser._id = result.insertedId
             user = newUser
+            const friend = { userId: result.insertedId, friendIds: [] }
+                const friendResult = await db.collection('friend').insertOne(friend)
         } else {
             user.isFirstLogin = false
         }

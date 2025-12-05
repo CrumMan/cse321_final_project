@@ -2,7 +2,7 @@ const express = require('express')
 const passport = require('passport')
 const router = express.Router()
 
-
+router.use('/comments', require('./comments'))
 router.use('/users', require('./users'))
 router.use('/posts', require('./posts') )
 router.use('/', require('./swagger'))

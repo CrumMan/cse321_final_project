@@ -112,6 +112,11 @@ catch(err){
 const deletePost = async (req,res) => {
     try{
         const postId = new ObjectId(req.params.id)
+        const sessionUser = req.session.user
+        if(!sessionUser || !sessionUser._id) {
+            return res.status(401).json({message:"User not authenticated"})
+        }
+        deleteCollectionById(sessionUser._id, 'post',  req,res)
         const response = await mongodb
         .getDb()
         .collection('post')
@@ -122,6 +127,20 @@ const deletePost = async (req,res) => {
     }
     catch(err){
         res.status(500).json({message:err.message || 'Error fetching posts collection'})
+    }
+}
+
+async function deleteCollectionById(id, collection,  req,res){
+    try{
+        const response = await mongodb
+        .getDb()
+        .collection(`${collection}`)
+        .deleteMany({postId: id})
+        return response.deletedCount
+    }
+    catch(err){
+        res.status(500).json({message:err.message || `Error finding ${collection}`})
+        return null;
     }
 }
 

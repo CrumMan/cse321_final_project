@@ -226,6 +226,14 @@ const deleteUser = async (req,res) => {
         .collection('userInfo')
         .deleteOne({_id: userId})
         
+        const deleteFriends = await deleteCollectionById(userId, 'friend',  req,res)
+        const deletePosts = await deleteCollectionById(userId, 'post', req, res)
+        const deleteComments = await deleteCollectionById(userId, 'comment', req, res)
+        
+        if(!deleteFriends === null || deletePosts === null, deleteComments === null){
+            return res.status(405).json({message: "Error deleting either friends, posts or comments"})
+        }
+
         if (userResponse.deletedCount > 0){
             if (infoResponse.deletedCount > 0){
                 res.status(200).json({message:"The User without info has been deleted"})
@@ -234,10 +242,126 @@ const deleteUser = async (req,res) => {
                 res.status(204).send()
             }
         }
-        else{throw new error("user not found")}
+        else{ throw new error("user not found") }
+        
     }
     catch(err){
         res.status(500).json({message:err.message || 'Error fetching users collection'})
+    }
+}
+
+const addFriend = async(req,res) => {
+    try{
+        const sessionUser = req.session.user
+        const friendId = new ObjectId(req.params.id)
+
+        const friendDoc = await mongodb
+        .getDb()
+        .collection('friend')
+        .findOne({userId: new ObjectId(sessionUser._id)})
+        
+        const userFriends = friendDoc.friendIds || []
+        userFriends.push(friendId)
+        
+        if(friendId === sessionUser._id){
+            return res.status(500).json(response.error || "You cannot add yourself." )
+        }
+
+        const alreadyFriend = friendDoc.friendIds.some(id => { id.equals(friendId)
+        });
+        if (alreadyFriend){return res.status(500).json("You have already added this friend." )}
+
+        const response = await mongodb
+            .getDb()
+            .collection('friend')
+            .updateOne({_id: friendDoc._id}, {$set: {friendIds: userFriends}})
+
+        if(response.modifiedCount > 0){
+            return res.status(204).send()
+        } else if(response.error) {
+            return res.status(500).json(response.error || "An error occoured updating the server" )
+        }
+    }
+    catch(err){
+        return res.status(500).json({message:err.message || 'Error adding friend'})
+    }
+}
+
+const deleteFriend = async(req,res) => {
+    try{
+        const sessionUser = req.session.user
+        const friendId = new ObjectId(req.params.id)
+
+        const friendDoc = await mongodb
+        .getDb()
+        .collection('friend')
+        .findOne({userId: new ObjectId(sessionUser._id)})
+        
+        const friends = friendDoc.friendIds || []
+
+        const userFriends = friends.filter( id => !id.equals(friendId) )
+
+        if (userFriends.length === friends.length){
+            return res.status(404).json({message: "Friend not found in friends list"})
+        }
+        
+        userFriends.pop(friendId)
+        
+        if(friendId === sessionUser._id){
+            return res.status(500).json(response.error || "You cannot add yourself." )
+        }
+        friendDoc.friendIds.forEach(friendsId => {
+            if (friendsId === friendId){return res.status(500).json("You have already added this friend." )}
+        });
+
+        const response = await mongodb
+            .getDb()
+            .collection('friend')
+            .updateOne({_id: friendDoc._id}, {$set: {friendIds: userFriends}})
+
+        if(response.modifiedCount > 0){
+            return res.status(204).send()
+        } else if(response.error) {
+            return res.status(500).json(response.error || "An error occoured updating the server" )
+        }
+    }
+    catch(err){
+        return res.status(500).json({message:err.message || 'Error adding friend'})
+    }
+}
+
+const getFriends = async(req,res) =>{
+    try{
+        const userId = new ObjectId(req.params.id)
+
+
+        const response = await mongodb
+        .getDb()
+        .collection('friend')
+        .findOne({userId: userId})
+        if(response){
+            res.setHeader('content-type',' application/json')
+           return res.status(200).json(response)
+        } else{
+            return res.status(404).json({message: "No friends found for user"})
+        }
+    }
+    catch(err){
+        return res.status(500).json({message:err.message || 'Error finding friend'})
+    }
+}
+
+async function deleteCollectionById(id, collection,  req,res){
+    try{
+        const response = await mongodb
+        .getDb()
+        .collection(`${collection}`)
+        .deleteMany({userId: id})
+        return response.deletedCount
+    }
+    catch(err){
+        res.status(500).json({message:err.message || `Error finding ${collection}`})
+        return null;
     }
 }
 
@@ -247,5 +371,8 @@ getSingle,
 updateUser,
 deleteUser,
 saveUserInfo,
-changeAuth
+changeAuth,
+addFriend,
+getFriends,
+deleteFriend
 }
