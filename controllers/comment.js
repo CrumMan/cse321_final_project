@@ -80,8 +80,11 @@ const createcomment = async (req,res) => {
         .insertOne(comment)
 
         if(response.acknowledged){
-            res.status(201).send(response)
+            res.status(201).json(response)
         } 
+        else{
+            res.status(500).json({message:"Failed to create comment"})
+        }
     }
 catch(err){
         res.status(500).json({message:err.message || 'Error fetching comments collection'})
@@ -142,7 +145,11 @@ const deletecomment = async (req,res) => {
         .collection('comment')
         .deleteOne({_id: commentId},true)
         if (response.deletedCount > 0){
-            res.status(204).send()
+            res.status(204).json({message:"Deleted Comment"})
+        }
+        else{
+            res.status(204).json({message:"Failed to delete comment"})
+            
         }
     }
     catch(err){
