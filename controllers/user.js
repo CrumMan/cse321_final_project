@@ -307,9 +307,6 @@ const deleteFriend = async(req,res) => {
         
         userFriends.pop(friendId)
         
-        if(friendId === sessionUser._id){
-            return res.status(500).json(response.error || "You cannot add yourself." )
-        }
         friendDoc.friendIds.forEach(friendsId => {
             if (friendsId === friendId){return res.status(500).json("You have already added this friend." )}
         });
@@ -326,7 +323,7 @@ const deleteFriend = async(req,res) => {
         }
     }
     catch(err){
-        return res.status(500).json({message:err.message || 'Error adding friend'})
+        return res.status(500).json({message:err.message || 'Error deleting friend'})
     }
 }
 

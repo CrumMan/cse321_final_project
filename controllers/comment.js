@@ -16,7 +16,7 @@ const getAllPostComments = async (req, res) => {
         .find({postId: postId})
         .toArray()
         if(!comments || comments.length === 0){
-            return res.status(404).json({message: "No Comments found for this post"})
+            return res.status(503).json({message: "No Comments found for this post"})
         }
         res.status(201).json(comments)
 }
@@ -52,7 +52,7 @@ const createcomment = async (req,res) => {
     try{
         const id = req.params.id;
         if (!ObjectId.isValid(id)){
-            return res.status(400).json({message:"ERR 400: Invalid user ID"})
+            return res.status(400).json({message:"ERR 400: Invalid comment ID"})
         }
         const postId = new ObjectId(id)
 
